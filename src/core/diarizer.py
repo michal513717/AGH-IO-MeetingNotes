@@ -13,7 +13,7 @@ class Diarizer:
     A class for performing speaker diarization using pyannote.audio.
     """
 
-    def __init__(self, model_path: str):
+    def __init__(self) -> None:
         self.model = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=os.getenv("HUGGING_FACE_TOKEN"))
 
     def get_segments(self, elements: Annotation) -> list[Segment]:

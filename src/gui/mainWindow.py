@@ -40,16 +40,16 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
 
-        self.startButton = QPushButton("Rozpocznij Nagrywanie")
+        self.startButton = QPushButton("Start recording")
         self.startButton.clicked.connect(self.startRecording)
         layout.addWidget(self.startButton)
 
-        self.stopButton = QPushButton("Zakończ Nagrywanie")
+        self.stopButton = QPushButton("Stop recording")
         self.stopButton.clicked.connect(self.stopRecording)
         self.stopButton.setEnabled(False)
         layout.addWidget(self.stopButton)
 
-        self.settingsButton = QPushButton("Ustawienia")
+        self.settingsButton = QPushButton("Settings")
         self.settingsButton.clicked.connect(self.openSettings)
         layout.addWidget(self.settingsButton)
 
@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
         if self.settings_window is None:
             self.settings_window = SettingsWindow()
         self.settings_window.show()
-        self.settings_window.activateWindow()  # Skupienie na oknie
+        self.settings_window.activateWindow()
 
     def startRecording(self):
         self.startButton.setEnabled(False)
@@ -77,16 +77,16 @@ class MainWindow(QMainWindow):
             self.transcribeFile(filename)
             logging.info("Zakończono nagrywanie")
         else:
-            QMessageBox.critical(self, "Błąd", "Nie udało się zapisać nagrania")
+            QMessageBox.critical(self, "Error", "Nie udało się zapisać nagrania")
 
     def transcribeFile(self, filename):
         self.transcriptionText = self.transcriber.transcribeAudio(filename)
         if self.transcriptionText:
             self.transcriptionArea.setPlainText(self.transcriptionText)
         else:
-            QMessageBox.critical(self, "Błąd", "Nie udało się przeprowadzić transkrypcji.")
+            QMessageBox.critical(self, "Error", "Nie udało się przeprowadzić transkrypcji.")
 
     def loadFile(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Wczytaj plik audio", "", "Pliki audio (*.wav *.mp3)")
+        filename, _ = QFileDialog.getOpenFileName(self, "Loaded audio file", "", "Audio files (*.wav *.mp3)")
         if filename:
             self.transcribeFile(filename)
