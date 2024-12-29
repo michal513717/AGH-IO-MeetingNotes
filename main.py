@@ -9,6 +9,9 @@ import config
 from src.gui.mainWindow import MainWindow
 from src.core.audioCapture import createAudioCapture
 from src.core.transcriber import Transcriber
+from src.gui.settingsWindow import SettingsWindow
+from src.core.settings import Settings
+
 from PyQt6.QtWidgets import QApplication
 
 def main():
@@ -17,24 +20,14 @@ def main():
     # Log config
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    try:
-        app = QApplication(sys.argv)
+    app = QApplication(sys.argv)
+    settings = Settings()
+    main_window = MainWindow(settings)
+    settings_window = SettingsWindow(settings)
+    main_window.show()
+    settings_window.show()
+    sys.exit(app.exec())
 
-        audio_capture = createAudioCapture(config.AUDIO_SOURCE)
-        if audio_capture is None:
-            logging.error("Nie udało się zainicjalizować przechwytywania audio.")
-            return 1
-
-        transcriber = Transcriber(config.WHISPER_MODEL)
-
-        window = MainWindow(audio_capture, transcriber)
-        window.show()
-
-        sys.exit(app.exec())
-
-    except Exception as e:
-        logging.exception(f"Wystąpił nieoczekiwany błąd: {e}")
-        return 1
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
