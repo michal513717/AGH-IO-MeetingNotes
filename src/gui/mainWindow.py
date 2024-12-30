@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
 
         self.stopButton = QPushButton("Stop recording")
         self.stopButton.clicked.connect(self.stopRecording)
-        self.stopButton.setEnabled(False)  # Początkowo wyłączony
+        self.stopButton.setEnabled(False)
         layout.addWidget(self.stopButton)
 
         self.transcriptionArea = QTextEdit()
@@ -57,36 +57,36 @@ class MainWindow(QMainWindow):
 
         self.settings_window = None
 
-    def openSettings(self):
+    def open_settings(self):
         if self.settings_window is None:
             self.settings_window = SettingsWindow()
         self.settings_window.show()
         self.settings_window.activateWindow()
 
-    def startRecording(self):
-        self.startButton.setEnabled(False)
-        self.stopButton.setEnabled(True)
-        self.audioCapture.startRecording()
-        logging.info("Rozpoczęto nagrywanie")
+    def start_recording(self):
+        self.start_button.setEnabled(False)
+        self.stop_button.setEnabled(True)
+        self.audio_capture.start_recording()
+        logging.info("Recording started")
 
-    def stopRecording(self):
-        self.startButton.setEnabled(True)
-        self.stopButton.setEnabled(False)
-        filename = self.audioCapture.stopRecording()
+    def stop_recording(self):
+        self.start_button.setEnabled(True)
+        self.stop_button.setEnabled(False)
+        filename = self.audio_capture.stop_recording()
         if filename:
-            self.transcribeFile(filename)
-            logging.info("Zakończono nagrywanie")
+            self.transcribe_file(filename)
+            logging.info("Recording stopped")
         else:
-            QMessageBox.critical(self, "Error", "Nie udało się zapisać nagrania")
+            QMessageBox.critical(self, "Error", "Failed to save recording")
 
-    def transcribeFile(self, filename):
-        self.transcriptionText = self.transcriber.transcribeAudio(filename)
-        if self.transcriptionText:
-            self.transcriptionArea.setPlainText(self.transcriptionText)
+    def transcribe_file(self, filename):
+        self.transcription_text = self.transcriber.transcribe_audio(filename)
+        if self.transcription_text:
+            self.transcription_area.setPlainText(self.transcription_text)
         else:
-            QMessageBox.critical(self, "Error", "Nie udało się przeprowadzić transkrypcji.")
+            QMessageBox.critical(self, "Error", "Transcription failed")
 
-    def loadFile(self):
-        filename, _ = QFileDialog.getOpenFileName(self, "Loaded audio file", "", "Audio files (*.wav *.mp3)")
+    def load_file(self):
+        filename, _ = QFileDialog.getOpenFileName(self, "Load Audio File", "", "Audio files (*.wav *.mp3)")
         if filename:
-            self.transcribeFile(filename)
+            self.transcribe_file(filename)

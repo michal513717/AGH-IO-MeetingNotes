@@ -2,8 +2,10 @@ from pyannote.core import Annotation, Segment
 from pyannote.audio import Pipeline
 from typing import Dict, List, Tuple, Optional
 from dotenv import load_dotenv
+from src.core.settings import Settings
 
 import soundfile as sf
+import os
 
 load_dotenv()
 
@@ -13,8 +15,9 @@ class Diarizer:
     A class for performing speaker diarization using pyannote.audio.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, settings: Settings) -> None:
         self.model = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=os.getenv("HUGGING_FACE_TOKEN"))
+        self.settings = settings
 
     def get_segments(self, elements: Annotation) -> list[Segment]:
         return elements._tracks.keys()

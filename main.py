@@ -7,7 +7,7 @@ sys.path.insert(0, project_root)
 import logging
 import config
 from src.gui.mainWindow import MainWindow
-from src.core.audioCapture import createAudioCapture
+from src.core.audioCapture import AudioCapture
 from src.core.transcriber import Transcriber
 from src.gui.settingsWindow import SettingsWindow
 from src.core.settings import Settings
@@ -24,6 +24,8 @@ def main():
     settings = Settings()
     main_window = MainWindow(settings)
     settings_window = SettingsWindow(settings)
+    audioCapture = AudioCapture(settings)
+    transcriber = Transcriber(settings)
     main_window.show()
     settings_window.show()
     sys.exit(app.exec())

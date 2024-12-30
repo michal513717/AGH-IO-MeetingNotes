@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, Set
 from utils import SettingName
 
 class Settings:
