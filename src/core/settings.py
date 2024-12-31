@@ -1,5 +1,6 @@
 from typing import Any, Callable, Dict, Set
 from utils import SettingName
+import os
 
 class Settings:
 
@@ -9,8 +10,27 @@ class Settings:
     """
 
     def __init__(self):
-        self.settings: Dict[SettingName, Any] = {}
         self._observers: Dict[SettingName, Set[Callable[[Any], None]]] = {}
+        self.settings: Dict[SettingName, Any] = {}
+
+        self.__setInitialSettings__()
+
+    def __setInitialSettings__(self):
+        self.settings.SettingName.CHANNELS = 1
+        self.settings.SettingName.NUM_SPEAKERS = 2
+        self.settings.SettingName.WINDOW_WIDTH = 800
+        self.settings.SettingName.SAMPLE_RATE = 44100
+        self.settings.SettingName.WINDOW_HEIGHT = 600
+        self.settings.SettingName.MAX_RECORDING_TIME = 60
+        self.settings.SettingName.WHISPER_MODEL = "large"
+        self.settings.SettingName.AUDIO_SOURCE = "microphone"
+        self.settings.SettingName.WHISPER_INPUT_LANGUAGE = "pl"
+        self.settings.SettingName.TRANSCRIPTION_FORMAT = "txt"
+        self.settings.SettingName.WHISPER_TRANSLATION_LANGUAGE = "en"
+        self.settings.SettingName.ALLOWED_EXTENSIONS = {"mp3", "wav", "mp4"}
+        self.settings.SettingName.WHISPER_DEVICE = "cuda" if os.environ.get("CUDA_AVAILABLE") else "cpu"
+        self.settings.SettingName.LOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app.log")
+        self.settings.SettingName.TRANSCRIPTION_OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcriptions")
 
     def attach(self, setting: SettingName, observer: Callable[[Any], None]):
         """Attaches an observer to a specific setting."""
@@ -37,12 +57,6 @@ class Settings:
     def get_setting(self, setting: SettingName) -> Any:
         """Gets the value of a setting."""
         return self.settings.get(setting)
-
-    def __getitem__(self, key: SettingName):
-        return self.get_setting(key)
-
-    def __setitem__(self, key: SettingName, value: Any):
-        self.set_setting(key, value)
 
     def set_multiple_settings(self, new_settings: Dict[SettingName, Any]):
         """Sets multiple settings at once and notifies observers once."""
