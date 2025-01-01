@@ -17,6 +17,8 @@ class SettingName:
     LOG_FILE = "log_file"
     SAMPLE_RATE = "sample_rate"
     CHANNELS = "channels"
+    WINDOW_WIDTH = "window_width"
+    WINDOW_HEIGHT = "window_height"
     NUM_SPEAKERS = "num_speakers"
     TRANSCRIPTION_OUTPUT_DIR = "transcription_output_dir"
     MAX_RECORDING_TIME = "max_recording_time"
