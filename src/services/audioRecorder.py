@@ -1,16 +1,9 @@
-import soundcard as sc
-import soundfile as sf
 import pyaudio
-import threading
 import wave
-import sys
 from src.utils.helper import Helper
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
-
 
 CHUNK_SIZE = 2048
 FILENAME = "loopback_record.wav"
-
 
 class AudioRecorder:
     def __init__(self):
