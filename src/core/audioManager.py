@@ -1,9 +1,9 @@
 import pyaudio
 
-class Helper:
-    
+class AudioManager():
+
     @staticmethod
-    def getDefaultSpeakers(): 
+    def get_default_speakers(): 
         try:
             audio_interface = pyaudio.PyAudio()
 

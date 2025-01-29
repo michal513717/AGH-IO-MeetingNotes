@@ -1,9 +1,8 @@
+from src.utils.settings import FILENAME, CHUNK_SIZE, RECORDS_DIR
+
 import pyaudio
 import wave
-from src.utils.helper import Helper
-
-CHUNK_SIZE = 2048
-FILENAME = "loopback_record.wav"
+import os
 
 class AudioRecorder:
     def __init__(self):
@@ -13,21 +12,22 @@ class AudioRecorder:
         self.wave_file = None
         self.stream = None
 
-    def start(self):
+    def start(self, default_speakers) -> None:
         if self.recording:
             return
         
+        self.default_speakers = default_speakers
         self.recording = True
         self._record_audio()
 
-    def _record_audio(self) -> None:
+    def _record_audio(self, meeting_name) -> None:
         try:
-            default_speakers = Helper.getDefaultSpeakers()
+            file_path = os.path.join(RECORDS_DIR, meeting_name, FILENAME)
 
-            self.wave_file = wave.open(FILENAME, 'wb')
-            self.wave_file.setnchannels(default_speakers["maxInputChannels"])
+            self.wave_file = wave.open(file_path, 'wb')
+            self.wave_file.setnchannels(self.default_speakers["maxInputChannels"])
             self.wave_file.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
-            self.wave_file.setframerate(int(default_speakers["defaultSampleRate"]))
+            self.wave_file.setframerate(int(self.default_speakers["defaultSampleRate"]))
             
             def callback(in_data, frame_count, time_info, status):
                 if self.recording:
@@ -38,13 +38,14 @@ class AudioRecorder:
             
             self.stream = self.p.open(
                 format=pyaudio.paInt16,
-                channels=default_speakers["maxInputChannels"],
-                rate=int(default_speakers["defaultSampleRate"]),
+                channels=self.default_speakers["maxInputChannels"],
+                rate=int(self.default_speakers["defaultSampleRate"]),
                 frames_per_buffer=CHUNK_SIZE,
                 input=True,
-                input_device_index=default_speakers["index"],
+                input_device_index=self.default_speakers["index"],
                 stream_callback=callback
             )
+
             self.stream.start_stream()
             
             while self.recording:

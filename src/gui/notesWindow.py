@@ -56,7 +56,6 @@ class NotesWindow(QDialog):
         meeting_title = item.text()
         filepath = os.path.join(RECORDS_DIR, meeting_title, "a.txt")
 
-        print(filepath)
         try:
             if os.path.exists(filepath):
                 with open(filepath, "r", encoding="utf-8") as f:
