@@ -3,11 +3,11 @@ from pygetwindow import getAllTitles, getWindowsWithTitle
 class WindowsManager():
 
     @staticmethod
-    def get_active_windows(self) -> list[str]:
+    def get_active_windows() -> list[str]:
         return list(filter(None, getAllTitles()))
     
     @staticmethod
-    def get_window_rect(self, title):
+    def get_window_rect(title):
         """
         Retrieves the dimensions and position of the specified application window.
 
@@ -31,7 +31,7 @@ class WindowsManager():
         }
     
     @staticmethod
-    def position_window(self, title, x, y):
+    def position_window(title, x, y):
         """
         Positions the specified application window at the specified coordinates.
 

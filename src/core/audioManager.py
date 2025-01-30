@@ -1,4 +1,4 @@
-import pyaudio
+import pyaudiowpatch as pyaudio
 
 class AudioManager():
 
@@ -20,5 +20,6 @@ class AudioManager():
                 else:
                     print("Default loopback output device not found.\n\nRun `python -m pyaudiowpatch` to check available devices.\nExiting...\n")
                     exit()
+            return default_speakers
         except Exception as e:
             raise RuntimeError(f"Audio device initialization failed: {e}")

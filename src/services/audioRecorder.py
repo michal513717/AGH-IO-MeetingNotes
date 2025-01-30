@@ -1,8 +1,9 @@
 from src.utils.settings import FILENAME, CHUNK_SIZE, RECORDS_DIR
 
-import pyaudio
+import pyaudiowpatch as pyaudio
 import wave
 import os
+import threading
 
 class AudioRecorder:
     def __init__(self):
@@ -12,17 +13,25 @@ class AudioRecorder:
         self.wave_file = None
         self.stream = None
 
-    def start(self, default_speakers) -> None:
-        if self.recording:
-            return
-        
-        self.default_speakers = default_speakers
-        self.recording = True
-        self._record_audio()
-
-    def _record_audio(self, meeting_name) -> None:
+    def start(self, default_speakers, meetingName: str) -> None:
         try:
-            file_path = os.path.join(RECORDS_DIR, meeting_name, FILENAME)
+            if self.recording:
+                return
+            
+            self.default_speakers = default_speakers
+            self.recording = True
+            self.meeting_name = meetingName
+            self.thread = threading.Thread(target=self._record_audio)
+            self.thread.start()
+
+        except Exception as e:
+            print(f"Error during recording start: {e}")
+
+    def _record_audio(self) -> None:
+        try:
+            print("Recording audio...")
+
+            file_path = os.path.join(RECORDS_DIR, self.meeting_name, FILENAME)
 
             self.wave_file = wave.open(file_path, 'wb')
             self.wave_file.setnchannels(self.default_speakers["maxInputChannels"])
@@ -53,6 +62,7 @@ class AudioRecorder:
         except Exception as e:
             print(f"Error: {e}\nPlease check if the default speaker is connected.")
         finally:
+            self.stop()
             self.recording = False
     
     def stop(self):

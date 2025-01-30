@@ -8,18 +8,14 @@ import os
 
 class VideoRecorder():
 
-    def __init__(self, camera, output_path):
-        self.camera = camera
-        self.output_path = output_path
+    def __init__(self):
         self.recording = False
 
     def start_recording(self):
         self.recording = True
-        self.camera.start_recording(self.output_path)
 
     def stop_recording(self):
         self.recording = False
-        self.camera.stop_recording()
 
     def start(self, meeting_name) -> None:
         try:

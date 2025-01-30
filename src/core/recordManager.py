@@ -14,7 +14,10 @@ class RecordManager:
             "mp4": self.start_mp4
         }
 
-    def start(self, source: str) -> None:
+    def start(self, meetingName: str, source: str) -> None:
+
+        self.meetingName = meetingName
+
         if source in self.sources:
             self.source = source
             self.sources[source]()
@@ -25,7 +28,7 @@ class RecordManager:
         
         WindowsManager.position_window_default()
 
-        self.videoRecorder.start()
+        self.videoRecorder.start(self.meetingName)
 
         print(f"Starting MP4 recording")
 
@@ -33,9 +36,15 @@ class RecordManager:
 
         default_speakers = AudioManager.get_default_speakers()
 
-        self.audioRecorder.start(default_speakers)
+        self.audioRecorder.start(default_speakers, self.meetingName)
         
         print(f"Starting MP3 recording")
 
     def stop(self) -> None:
-        pass
+        
+        if self.source == "mp3":
+            self.audioRecorder.stop()
+        elif self.source == "mp4":
+            self.videoRecorder.stop()
+        else:
+            print("No source to stop")
