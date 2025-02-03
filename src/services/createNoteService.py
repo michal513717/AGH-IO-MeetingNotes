@@ -1,10 +1,12 @@
-from src.utils.settings import CHAT_GPT_API_KEY, RECORDS_DIR, TRANSCRIPTION_FILE_NAME, NOTE_LANGUAGES, NOTE_FILE_NAME, NOTES_WORD_LIMIT
+from src.utils.settings import CHAT_GPT_API_KEY, RECORDS_DIR, TRANSCRIPTION_FILE_NAME, NOTE_LANGUAGES, NOTE_FILE_NAME_TXT, NOTES_WORD_LIMIT, NOTE_FILE_NAME_PDF, FONTS_DIR, FONT_NAME
 from openai import OpenAI
+from fpdf import FPDF
 import os
 
 class CreateNoteSerivce():
     def __init__(self):
         self.client = OpenAI(api_key=CHAT_GPT_API_KEY)
+        self.pdf = FPDF()
 
     def _summarize_meeting(self, meeting_name: str) -> str:
 
@@ -35,9 +37,22 @@ class CreateNoteSerivce():
     
     def create_notes(self, meeting_name: str) -> None:
 
-        notes = self._summarize_meeting(meeting_name)
+        # notes = self._summarize_meeting(meeting_name)
+        notes = "Podczas spotkania omówiono dwa rodzaje smogu: smog fotochemiczny (typ Los Angeles) i smog londyński. Zdecydowano o konieczności działań mających na celu zmniejszenie emisji tlenków azotu z układów wydechowych samochodów, które przyczyniają się do powstawania smogu fotochemicznego. Ustalono również, że należy monitorować poziom zanieczyszczeń związanych z sadzą i niespalonym paliwem w celu ograniczenia smogu londyńskiego. Dalsze kroki obejmują przygotowanie raportu na temat wpływu obu typów smogu na zdrowie publiczne."
 
-        output_path = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME)
+        self._save_notes(meeting_name, notes)
 
-        with open(output_path, 'w', encoding='utf-8') as file:
+    def _save_notes(self, meeting_name: str, notes: str) -> None:
+        output_path_txt = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME_TXT)
+        output_path_pdf = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME_PDF)
+
+        with open(output_path_txt, 'w', encoding='utf-8') as file:
             file.write(notes)
+
+        self.pdf.add_page()
+        self.pdf.set_margins(left=25, top=20, right=25)
+        self.pdf.set_auto_page_break(True, margin=10)
+        self.pdf.add_font("DejaVu", "", os.path.join(FONTS_DIR, FONT_NAME), uni=True)
+        self.pdf.set_font("DejaVu", size=15)
+        self.pdf.multi_cell(0, 10, txt=notes, align='C')
+        self.pdf.output(output_path_pdf)

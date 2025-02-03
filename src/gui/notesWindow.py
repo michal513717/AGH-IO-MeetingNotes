@@ -1,7 +1,7 @@
 import os
 from PyQt6.QtWidgets import (QDialog, QHBoxLayout, QListWidgetItem,
                              QListWidget, QTextEdit, QVBoxLayout, QMessageBox)
-from src.utils.settings import RECORDS_DIR
+from src.utils.settings import RECORDS_DIR, NOTE_FILE_NAME_TXT
 
 class NotesWindow(QDialog):
     def __init__(self):
@@ -54,7 +54,7 @@ class NotesWindow(QDialog):
             return
 
         meeting_title = item.text()
-        filepath = os.path.join(RECORDS_DIR, meeting_title, "a.txt")
+        filepath = os.path.join(RECORDS_DIR, meeting_title, NOTE_FILE_NAME_TXT)
 
         try:
             if os.path.exists(filepath):

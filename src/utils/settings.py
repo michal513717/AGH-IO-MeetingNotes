@@ -1,14 +1,18 @@
 import os
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ASSETS_DIR = os.path.join(BASE_DIR, "..", "assets")
+FONTS_DIR = os.path.join(ASSETS_DIR, "fonts")
 RECORDS_DIR = os.path.join(BASE_DIR, "data")
+FONT_NAME = 'DejaVuSans.ttf'
 WHISPER_MODEL = "base"
 CHUNK_SIZE = 2048
 FPS = 20
 SCREENSHOT_INTERVAL = 1
 TRANSCRIPTION_FILE_NAME = "transcription.txt"
 NOTE_LANGUAGES = "PL"
-NOTE_FILE_NAME = "notes.txt"
+NOTE_FILE_NAME_TXT = "notes.txt"
+NOTE_FILE_NAME_PDF = "notes.pdf"
 FILE_NAME_MP3 = "loopback_record.wav"
 FILE_NAME_MP4 = "video.avi"
 FOURCC = "MJPG"
