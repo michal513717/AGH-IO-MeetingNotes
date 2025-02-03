@@ -1,4 +1,4 @@
-from src.utils.settings import RECORDS_DIR, WHISPER_MODEL
+from src.utils.settings import RECORDS_DIR, WHISPER_MODEL, TRANSCRIPTION_FILE_NAME
 
 import whisper
 import os
@@ -41,11 +41,11 @@ class TranscriberService:
         :return: True on success, False on error.
         """
 
-        filepath = os.path.join(RECORDS_DIR, filename)
+        filepath = os.path.join(RECORDS_DIR, filename, TRANSCRIPTION_FILE_NAME)
 
         try:
             if format == "txt":
-                with open(filepath + ".txt", "w", encoding="utf-8") as f:
+                with open(filepath, "w", encoding="utf-8") as f:
                     f.write(transcript)
             elif format == "pdf":
                 print("PDF saving is not implemented yet.")

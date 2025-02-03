@@ -2,13 +2,17 @@ import os
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RECORDS_DIR = os.path.join(BASE_DIR, "data")
-WHISPER_MODEL = "large"
+WHISPER_MODEL = "base"
 CHUNK_SIZE = 2048
 FPS = 20
 SCREENSHOT_INTERVAL = 1
+TRANSCRIPTION_FILE_NAME = "transcription.txt"
+NOTE_LANGUAGES = "PL"
+NOTE_FILE_NAME = "notes.txt"
 FILE_NAME_MP3 = "loopback_record.wav"
 FILE_NAME_MP4 = "video.avi"
 FOURCC = "MJPG"
+NOTES_WORD_LIMIT = 100
 CHAT_GPT_API_KEY = ""
 
 LANGUAGES = {
