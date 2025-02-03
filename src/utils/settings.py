@@ -4,7 +4,10 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RECORDS_DIR = os.path.join(BASE_DIR, "data")
 WHISPER_MODEL = "large"
 CHUNK_SIZE = 2048
-FILENAME = "loopback_record.wav"
+FPS = 20
+FILE_NAME_MP3 = "loopback_record.wav"
+FILE_NAME_MP4 = "video.avi"
+FOURCC = "MJPG"
 
 
 LANGUAGES = {

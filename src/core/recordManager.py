@@ -1,50 +1,49 @@
-from src.services.audioRecorder import AudioRecorder
-from src.services.videoRecorder import VideoRecorder
-from src.core.windowsManager import WindowsManager
-from src.core.audioManager import AudioManager
+from src.recorders.audioRecorder import AudioRecorder
+from src.recorders.videoRecorder import VideoRecorder
+from src.utils.settings import RECORDS_DIR
+
+import ffmpeg
+import os
 
 class RecordManager:
 
     def __init__(self):
-        self.audioRecorder = AudioRecorder()
-        self.videoRecorder = VideoRecorder()
-        self.source = None
-        self.sources = {
-            "mp3": self.start_mp3,
-            "mp4": self.start_mp4
-        }
+        self.audioRecorder = AudioRecorder("")
+        self.videoRecorder = VideoRecorder("", "")
+        self.meeting_name = None
+        self.window_name = None
 
-    def start(self, meetingName: str, source: str) -> None:
+    def start(self, meeting_name: str, window_name: str) -> None:
+        try:
+            self.meeting_name = meeting_name
+            self.window_name = window_name
+            self.audioRecorder.set_meeting_name(meeting_name)
+            self.videoRecorder.set_meeting_name(meeting_name)
+            self.videoRecorder.set_window_name(window_name)
 
-        self.meetingName = meetingName
-
-        if source in self.sources:
-            self.source = source
-            self.sources[source]()
-        else:
-            print(f"Invalid source: {source}")
-
-    def start_mp4(self) -> None:
-        
-        WindowsManager.position_window_default()
-
-        self.videoRecorder.start(self.meetingName)
-
-        print(f"Starting MP4 recording")
-
-    def start_mp3(self) -> None:
-
-        default_speakers = AudioManager.get_default_speakers()
-
-        self.audioRecorder.start(default_speakers, self.meetingName)
-        
-        print(f"Starting MP3 recording")
+            self.audioRecorder.start()
+            self.videoRecorder.start()
+        except Exception as e:
+            print(f"Error during recording: {e}")
 
     def stop(self) -> None:
-        
-        if self.source == "mp3":
-            self.audioRecorder.stop()
-        elif self.source == "mp4":
-            self.videoRecorder.stop()
-        else:
-            print("No source to stop")
+
+        self.audioRecorder.stop()
+        self.videoRecorder.stop()
+
+        self.concat_files()
+
+
+    def concat_files(self) -> None:
+        video_stream = ffmpeg.input(self.videoRecorder.video_filename_path)
+        audio_stream = ffmpeg.input(self.audioRecorder.audio_filename_path)
+
+        output = os.path.join(RECORDS_DIR, self.meeting_name, self.meeting_name + '.mp4')
+
+        ffmpeg.output(audio_stream, video_stream, output).run(overwrite_output=True)
+
+        # TODO fix 
+        if os.path.exists(video_stream):
+            os.remove(video_stream)
+        if os.path.exists(audio_stream):
+            os.remove(video_stream)

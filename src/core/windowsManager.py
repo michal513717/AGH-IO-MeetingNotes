@@ -4,6 +4,7 @@ class WindowsManager():
 
     @staticmethod
     def get_active_windows() -> list[str]:
+        print(list(filter(None, getAllTitles())))
         return list(filter(None, getAllTitles()))
     
     @staticmethod
@@ -39,20 +40,48 @@ class WindowsManager():
         :param x: The x-coordinate of the window.
         :param y: The y-coordinate of the window.
         """
-        windows = getWindowsWithTitle(title)[0]
+        try:
+            windows = getWindowsWithTitle(title)
 
-        if not windows:
-            raise ValueError(f"Window with title '{title}' not found.")
+            if not windows:
+                raise ValueError(f"Window with title '{title}' not found.")
 
-        window = windows[0]
-        window.activate()
-        window.moveTo(x, y)
+            window = windows[0]
+            window.activate()
+            window.moveTo(x, y)
+
+        except Exception as e:
+            print(f"Error during positioning window: {e}")
 
     @staticmethod
-    def position_window_default(self, title):
+    def position_window_default(title):
         """
         Positions the specified application window at the default coordinates.
 
         :param title: The title of the window.
         """
-        self.position_window(title, 0, 0)
+        WindowsManager.position_window(title, 0, 0)
+
+    @staticmethod
+    def get_window_rect(title):
+        """
+        Retrieves the dimensions and position of the specified application window.
+
+        :returns: A dictionary containing the keys 'left', 'top', 'width', and 'height' for the window's dimensions.
+        :rtype: dict
+
+        :raises ValueError: If no window with the specified title is found.
+        """
+
+        windows = getWindowsWithTitle(title)
+
+        if not windows:
+            raise ValueError(f"Window with title '{title}' not found.")
+
+        window = windows[0]
+        return {
+            'left': window.left,
+            'top': window.top,
+            'width': window.width,
+            'height': window.height
+        }
