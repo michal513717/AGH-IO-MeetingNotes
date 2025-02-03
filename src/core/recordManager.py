@@ -53,7 +53,6 @@ class RecordManager:
 
         ffmpeg.output(audio_stream, video_stream, output).run(overwrite_output=True)
 
-        # TODO fix 
         if os.path.exists(video_stream_path):
             os.remove(video_stream_path)
         if os.path.exists(audio_stream_path):

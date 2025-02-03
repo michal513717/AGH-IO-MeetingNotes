@@ -5,10 +5,11 @@ RECORDS_DIR = os.path.join(BASE_DIR, "data")
 WHISPER_MODEL = "large"
 CHUNK_SIZE = 2048
 FPS = 20
+SCREENSHOT_INTERVAL = 1
 FILE_NAME_MP3 = "loopback_record.wav"
 FILE_NAME_MP4 = "video.avi"
 FOURCC = "MJPG"
-
+CHAT_GPT_API_KEY = ""
 
 LANGUAGES = {
     "en": "english",

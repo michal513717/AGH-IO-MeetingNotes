@@ -27,7 +27,6 @@ class VideoRecorder():
         self.start_time = time.time()
         self.set_meeting_name(meeting_name)
         self.set_window_name(window_name)
-        self.update_video_sources()
 
     def set_meeting_name(self, meeting_name) -> None:
         self.video_filename_path = os.path.join(RECORDS_DIR, meeting_name, FILE_NAME_MP4)
@@ -78,33 +77,3 @@ class VideoRecorder():
         self.update_video_sources()
         self.video_thread = threading.Thread(target=self.record)
         self.video_thread.start()
-
-
-def start_video_recording(filename="test"):
-    global video_thread
-    global audio_thread
-    audio_thread = AudioRecorder(filename)
-    video_thread = VideoRecorder(filename)
-    audio_thread.start()
-    video_thread.start()
-    return filename
-
-
-def stop_AVrecording(filename="test"):
-    audio_thread.stop()
-    # frame_counts = video_thread.frame_counts
-    # elapsed_time = time.time() - video_thread.start_time
-    # recorded_fps = frame_counts / elapsed_time
-    # print("total frames " + str(frame_counts))
-    # print("elapsed time " + str(elapsed_time))
-    # print("recorded fps " + str(recorded_fps))
-    video_thread.stop()
-
-    # while threading.active_count() > 1:
-    #     print(threading.active_count())
-    #     time.sleep(1)
-
-    video_stream = ffmpeg.input(video_thread.video_filename_path)
-    audio_stream = ffmpeg.input(audio_thread.audio_filename_path)
-
-    ffmpeg.output(audio_stream, video_stream, 'out.mp4').run(overwrite_output=True)
