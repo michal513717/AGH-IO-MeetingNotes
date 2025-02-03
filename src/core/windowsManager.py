@@ -4,7 +4,6 @@ class WindowsManager():
 
     @staticmethod
     def get_active_windows() -> list[str]:
-        print(list(filter(None, getAllTitles())))
         return list(filter(None, getAllTitles()))
     
     @staticmethod
@@ -17,7 +16,6 @@ class WindowsManager():
 
         :raises ValueError: If no window with the specified title is found.
         """
-
         windows = getWindowsWithTitle(title)
 
         if not windows:
@@ -72,7 +70,6 @@ class WindowsManager():
 
         :raises ValueError: If no window with the specified title is found.
         """
-
         windows = getWindowsWithTitle(title)
 
         if not windows:
