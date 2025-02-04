@@ -7,6 +7,10 @@ class WindowsManager():
         return list(filter(None, getAllTitles()))
     
     @staticmethod
+    def get_active_meetins_applications() -> list[str]:
+        return [app for app in WindowsManager.get_active_windows() if any(meeting in app.lower() for meeting in ['webex', 'google', 'zoom'])]
+    
+    @staticmethod
     def get_window_rect(title):
         """
         Retrieves the dimensions and position of the specified application window.
