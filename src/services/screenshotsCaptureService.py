@@ -43,7 +43,12 @@ class ScreenshootsCaptureService:
         self.thread.start()
 
     def stop(self):
-        self.is_running = False
-        if self.thread is not None:
-            self.thread.join()
-            self.thread = None
+        try: 
+            print(f"{self.__class__.__name__} - STOP")
+            self.is_running = False
+            if self.thread is not None:
+                self.thread.join()
+                self.thread = None
+        except Exception as e:
+            print(e)
+

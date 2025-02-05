@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self.meeting_notes_manager = MeetingNotesManager()
 
         self.setWindowTitle("Meeting Notes")
-        self.setFixedSize(400, 300)  # Fixed window size
+        self.setFixedSize(400, 275)  # Fixed window size
 
         central_widget = QWidget()
         layout = QVBoxLayout()
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def open_calendar(self) -> None:
-        calendar_window = CalendarWindow()
+        calendar_window = CalendarWindow(self.start_recording_planned)
         calendar_window.exec()
 
     def open_settings(self) -> None:
@@ -71,7 +71,8 @@ class MainWindow(QMainWindow):
         notes_window.exec()
     
     def update_window_list(self) -> None:
-        for window in WindowsManager.get_active_meetins_applications():
+        # for window in WindowsManager.get_active_meetins_applications():
+        for window in WindowsManager.get_active_windows():
             self.window_select.addItem(window)
 
     def start_recording(self) -> None:
@@ -85,6 +86,13 @@ class MainWindow(QMainWindow):
         self.meeting_notes_manager.set_window_name(self.window_select.currentText())
         self.meeting_notes_manager.start_record(self.name_input.text())
         print("Recording started")
+
+    def start_recording_planned(self, meeting_name, window_name) -> None:
+        pass
+        # self.name_input.setText(meeting_name)
+        # self.window_select.setItemText(window_name)
+
+        # self.start_recording()
 
     def check_requirments(self) -> bool:
 
@@ -102,4 +110,3 @@ class MainWindow(QMainWindow):
         self.start_button.setEnabled(True)
         self.stop_button.setEnabled(False)
         self.meeting_notes_manager.stop_record()
-        print("Recording stopped")

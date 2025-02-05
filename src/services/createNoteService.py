@@ -50,7 +50,7 @@ class CreateNoteSerivce():
         return response.choices[0].message.content
     
     def create_notes(self, meeting_name: str) -> None:
-
+        print(f"{self.__class__.__name__} - Create notes start")
         notes = self._summarize_meeting(meeting_name)
         # notes = "Podczas spotkania omówiono dwa rodzaje smogu: smog fotochemiczny (typ Los Angeles) i smog londyński. Zdecydowano o konieczności działań mających na celu zmniejszenie emisji tlenków azotu z układów wydechowych samochodów, które przyczyniają się do powstawania smogu fotochemicznego. Ustalono również, że należy monitorować poziom zanieczyszczeń związanych z sadzą i niespalonym paliwem w celu ograniczenia smogu londyńskiego. Dalsze kroki obejmują przygotowanie raportu na temat wpływu obu typów smogu na zdrowie publiczne."
 

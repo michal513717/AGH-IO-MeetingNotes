@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QTextEdit, QCalendarWidget
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QCalendarWidget, QPushButton
+from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QColor, QTextCharFormat
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -11,13 +12,12 @@ from PyQt6.QtCore import QDate
 import os
 import datetime
 
-
-
 class CalendarWindow(QDialog):
-    def __init__(self):
+    def __init__(self, start_recording_planned):
         super().__init__()
         self.initUI()
         self.creds = self.authenticate_google()
+        self.start_recording_planned = start_recording_planned
         self.load_events()
 
     def initUI(self):
@@ -43,6 +43,9 @@ class CalendarWindow(QDialog):
         """
         try:
             creds = None
+
+            print(CREDENTIALS_PATH)
+            print(CREDENTIALS_TOKEN_PATH)
 
             if os.path.exists(CREDENTIALS_TOKEN_PATH):
                 creds = Credentials.from_authorized_user_file(CREDENTIALS_TOKEN_PATH, SCOPES)
@@ -95,11 +98,28 @@ class CalendarWindow(QDialog):
 
         for event in events:
             event_summary = event["summary"]
+            start_time = event["start"].get("dateTime", None)
+
 
             if any(tag in event_summary for tag in ["zoom", "teams", "googlemeet"]):
+                # start_datetime = datetime.datetime.fromisoformat(start_time[:-1])
                 event_date = event["start"]["date"]
                 year, month, day = map(int, event_date.split('-'))
                 highlighted_date = QDate(year, month, day)
                 fmt = QTextCharFormat()
                 fmt.setBackground(QColor('yellow'))
                 self.calendar.setDateTextFormat(highlighted_date, fmt)
+
+                # if self.settings_manager.get("AUTO_RECORDING", False):
+                #     self.schedule_recording(start_datetime)
+
+
+    def schedule_recording(self, event_time) -> None:
+        now = datetime.datetime.now()
+        delay = (event_time - now).total_seconds() * 1000  # ms
+        if delay > 0:
+            timer = QTimer(self)
+            timer.setSingleShot(True)
+            timer.timeout.connect(self.start_recording_planned)
+            timer.start(int(delay))
+            print(f"Recording scheduled at {event_time}")

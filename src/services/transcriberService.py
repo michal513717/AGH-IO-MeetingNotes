@@ -65,6 +65,7 @@ class TranscriberService:
         """
         Combines transcription and saving to file in one step.
         """
+        print(f"{self.__class__.__name__} - Transcribe start")
         transcript = self.transcribe_audio(audio_path, self.settings_manager.get_setting("MEETING_LANGUAGE"))
         if transcript:
             return self.save_transcript(transcript, filename, format)

@@ -23,6 +23,7 @@ class DirectoriesManager():
         """
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory))
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory, "screenshots"))
+        DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory, "audios"))
 
     @staticmethod
     def is_directory_exists(directory) -> bool:

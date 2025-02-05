@@ -3,6 +3,8 @@ from src.recorders.videoRecorder import VideoRecorder
 from src.services.screenshotsCaptureService import ScreenshootsCaptureService
 from src.managers.settingsManager import SettingsManager
 from src.utils.paths import RECORDS_DIR
+from src.utils.constans import FILE_NAME_MP3
+import wave
 import ffmpeg
 import time
 import os
@@ -40,15 +42,65 @@ class RecordManager:
         self.videoRecorder.stop()
         self.screenshotsCaptureService.stop()
 
+        # if self.audioRecorder.audio_thread is not None:
+        #     print("Waiting for audioRecorder thread to finish...")
+        #     self.audioRecorder.audio_thread.join()
+        #     print("audioRecorder thread finished")
+
+        if self.videoRecorder.video_thread is not None:
+            print("Waiting for videoRecorder thread to finish...")
+            self.videoRecorder.video_thread.join()
+            print("videoRecorder thread finished")
+
+        if self.screenshotsCaptureService.thread is not None:
+            print("Waiting for screenshotsCaptureService thread to finish...")
+            self.screenshotsCaptureService.thread.join()
+            print("screenshotsCaptureService thread finished")
+
+        print("Executing concat_files")
+        self.concat_audio_files()
         self.concat_files()
 
+    def concat_audio_files(self): 
+        files = self.get_wav_files_from_directory(os.path.join(RECORDS_DIR, self.meeting_name, "audios"))
+        data = []
+        
+        for clip in files:
+            w = wave.open(clip, "rb")
+            data.append([w.getparams(), w.readframes(w.getnframes())])
+            w.close()
+        
+        output = wave.open(os.path.join(RECORDS_DIR, self.meeting_name, FILE_NAME_MP3), "wb")
+
+        output.setparams(data[0][0])
+        for i in range(len(data)):
+            output.writeframes(data[i][1])
+        output.close()
+
+        # with wave.open(files[0], 'rb') as first_wav:
+        #     params = first_wav.getparams()
+        #     frames = first_wav.readframes(first_wav.getnframes())
+        
+        # for filename in files[1:]:
+        #     with wave.open(filename, 'rb') as wav_file:
+        #         if wav_file.getparams() != params:
+        #             raise ValueError(f"Plik {filename} ma inne parametry audio!")
+        #         frames += wav_file.readframes(wav_file.getnframes())
+        
+        # with wave.open(os.path.join(RECORDS_DIR, self.meeting_name, FILE_NAME_MP3), 'wb') as output_wav:
+        #     output_wav.setparams(params)
+        #     output_wav.writeframes(frames)
+
+    def get_wav_files_from_directory(self, directory):
+        return [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith(".wav")]
 
     def concat_files(self) -> None:
         try: 
+            print(f"{self.__class__.__name__} - Start concat files")
             time.sleep(1)
 
             video_stream_path = self.videoRecorder.video_filename_path
-            audio_stream_path = self.audioRecorder.audio_filename_path
+            audio_stream_path = os.path.join(RECORDS_DIR, self.meeting_name, FILE_NAME_MP3)
 
             if not os.path.exists(video_stream_path):
                 print(f"ERROR: Video file not found: {video_stream_path}")

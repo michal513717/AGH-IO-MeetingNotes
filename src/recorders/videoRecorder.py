@@ -66,11 +66,15 @@ class VideoRecorder():
 
     def stop(self) -> None:
         "Finishes the video recording therefore the thread too"
-        self.is_recording = False
-        if self.video_thread is not None:
-            self.open = False
-            self.video_thread.join()
-            self.video_thread = None
+        try: 
+            print(f"{self.__class__.__name__} - STOP")
+            self.is_recording = False
+            if self.video_thread is not None:
+                self.open = False
+                self.video_thread.join()
+                self.video_thread = None
+        except Exception as e:
+            print(e)
 
     def start(self) -> None:
         "Launches the video recording function using a thread"

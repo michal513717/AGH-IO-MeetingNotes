@@ -23,7 +23,8 @@ class SettingsManager():
                 "SCREENSHOT_INTERVAL": 1,
                 "MEETING_LANGUAGE": "pl",
                 "NOTE_LANGUAGES": "pl",
-                "NOTES_WORD_LIMIT": 100
+                "NOTES_WORD_LIMIT": 100,
+                "AUTO_RECORDING": False
             }
 
     def save_settings(self):
