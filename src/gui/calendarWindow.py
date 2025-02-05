@@ -5,13 +5,13 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
-from src.utils.settings import  CREDENTIALS_PATH, CREDENTIALS_TOKEN_PATH
+from src.utils.paths import CREDENTIALS_PATH, CREDENTIALS_TOKEN_PATH
+from src.utils.constans import SCOPES
 from PyQt6.QtCore import QDate
 import os
-import sys
 import datetime
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+
 
 class CalendarWindow(QDialog):
     def __init__(self):
@@ -96,7 +96,7 @@ class CalendarWindow(QDialog):
         for event in events:
             event_summary = event["summary"]
 
-            if any(tag in event_summary for tag in ["zoom", "webex", "googlemeet"]):
+            if any(tag in event_summary for tag in ["zoom", "teams", "googlemeet"]):
                 event_date = event["start"]["date"]
                 year, month, day = map(int, event_date.split('-'))
                 highlighted_date = QDate(year, month, day)

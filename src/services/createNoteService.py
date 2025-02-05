@@ -1,4 +1,6 @@
-from src.utils.settings import CHAT_GPT_API_KEY, RECORDS_DIR, TRANSCRIPTION_FILE_NAME, NOTE_LANGUAGES, NOTE_FILE_NAME_TXT, NOTES_WORD_LIMIT, NOTE_FILE_NAME_PDF, FONTS_DIR, FONT_NAME
+from src.utils.constans import CHAT_GPT_API_KEY, TRANSCRIPTION_FILE_NAME, NOTE_FILE_NAME_TXT, NOTE_FILE_NAME_PDF, FONT_NAME
+from src.utils.settings import NOTE_LANGUAGES, NOTES_WORD_LIMIT
+from src.utils.paths import RECORDS_DIR, FONTS_DIR
 from openai import OpenAI
 from fpdf import FPDF
 import os

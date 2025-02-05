@@ -1,7 +1,8 @@
 import os
 from PyQt6.QtWidgets import (QDialog, QHBoxLayout, QListWidgetItem,
                              QListWidget, QTextEdit, QVBoxLayout, QMessageBox)
-from src.utils.settings import RECORDS_DIR, NOTE_FILE_NAME_TXT
+from src.utils.constans import NOTE_FILE_NAME_TXT
+from src.utils.paths import RECORDS_DIR
 
 class NotesWindow(QDialog):
     def __init__(self):

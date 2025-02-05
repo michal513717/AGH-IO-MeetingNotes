@@ -1,4 +1,4 @@
-from src.utils.settings import RECORDS_DIR
+from src.utils.paths import RECORDS_DIR
 
 import os
 

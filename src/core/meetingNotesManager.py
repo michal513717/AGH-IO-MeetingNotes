@@ -1,6 +1,4 @@
 from src.core.directoriesManager import DirectoriesManager
-from src.core.audioManager import AudioManager
-from src.core.windowsManager import WindowsManager
 from src.core.recordManager import RecordManager
 
 class MeetingNotesManager:

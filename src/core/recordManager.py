@@ -1,8 +1,8 @@
 from src.recorders.audioRecorder import AudioRecorder
 from src.recorders.videoRecorder import VideoRecorder
 from src.services.screenshotsCaptureService import ScreenshootsCaptureService
-from src.utils.settings import RECORDS_DIR, SCREENSHOT_INTERVAL
-
+from src.utils.settings import SCREENSHOT_INTERVAL
+from src.utils.paths import RECORDS_DIR
 import ffmpeg
 import os
 

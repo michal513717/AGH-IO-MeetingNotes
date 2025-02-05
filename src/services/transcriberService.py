@@ -1,5 +1,6 @@
-from src.utils.settings import RECORDS_DIR, WHISPER_MODEL, TRANSCRIPTION_FILE_NAME
-
+from src.utils.settings import WHISPER_MODEL
+from src.utils.constans import TRANSCRIPTION_FILE_NAME
+from src.utils.paths import RECORDS_DIR
 import whisper
 import os
 

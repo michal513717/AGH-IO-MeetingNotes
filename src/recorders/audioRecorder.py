@@ -1,5 +1,6 @@
 from src.core.audioManager import AudioManager
-from src.utils.settings import CHUNK_SIZE, RECORDS_DIR, FILE_NAME_MP3
+from src.utils.constans import CHUNK_SIZE, FILE_NAME_MP3
+from src.utils.paths import RECORDS_DIR
 
 import pyaudiowpatch as pyaudio
 import threading
@@ -7,8 +8,16 @@ import wave
 import os
 
 class AudioRecorder():
-    def __init__(self, meetingName: str):
+    """
+    Class to handle audio recording operations.
+    """
 
+    def __init__(self, meetingName: str):
+        """
+        Initializes the AudioRecorder instance with specified meeting name.
+        
+        :param meetingName: Name of the meeting used to save the audio file.
+        """
         self.default_speakers = AudioManager.get_default_speakers()
         self.open = True
         self.rate = int(self.default_speakers["defaultSampleRate"])
@@ -29,6 +38,11 @@ class AudioRecorder():
 
     
     def set_meeting_name(self, meeting_name) -> None:
+        """
+        Sets the meeting name and updates the audio file path.
+
+        :param meeting_name: Name of the meeting to save the audio file.
+        """
         self.audio_filename_path = os.path.join(RECORDS_DIR, meeting_name, FILE_NAME_MP3)
 
     def record(self) -> None:

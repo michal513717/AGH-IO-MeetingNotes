@@ -1,5 +1,6 @@
-from src.utils.settings import FPS, RECORDS_DIR, FILE_NAME_MP4, FOURCC
-from src.recorders.audioRecorder import AudioRecorder
+from src.utils.constans import FILE_NAME_MP4, FOURCC
+from src.utils.settings import FPS
+from src.utils.paths import RECORDS_DIR
 from src.core.windowsManager import WindowsManager
 import cv2
 import time
@@ -7,8 +8,6 @@ import os
 import threading
 from mss import mss
 import numpy as np
-import ffmpeg
-
 
 class VideoRecorder():
     "Video class based on openCV"

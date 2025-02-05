@@ -8,7 +8,7 @@ class WindowsManager():
     
     @staticmethod
     def get_active_meetins_applications() -> list[str]:
-        return [app for app in WindowsManager.get_active_windows() if any(meeting in app.lower() for meeting in ['webex', 'google', 'zoom'])]
+        return [app for app in WindowsManager.get_active_windows() if any(meeting in app.lower() for meeting in ['teams', 'meet', 'zoom'])]
     
     @staticmethod
     def get_window_rect(title):
@@ -34,7 +34,7 @@ class WindowsManager():
         }
     
     @staticmethod
-    def position_window(title, x, y):
+    def position_window(title, x, y) -> None:
         """
         Positions the specified application window at the specified coordinates.
 
@@ -56,7 +56,7 @@ class WindowsManager():
             print(f"Error during positioning window: {e}")
 
     @staticmethod
-    def position_window_default(title):
+    def position_window_default(title) -> None:
         """
         Positions the specified application window at the default coordinates.
 
