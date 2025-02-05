@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         return True
 
     def stop_recording(self) -> None:
-        self.start_button(True)
-        self.stop_button(False)
+        self.start_button.setEnabled(True)
+        self.stop_button.setEnabled(False)
         self.meeting_notes_manager.stop_record()
         print("Recording stopped")

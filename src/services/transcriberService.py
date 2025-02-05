@@ -1,4 +1,4 @@
-from src.utils.settings import WHISPER_MODEL
+from src.utils.settings import WHISPER_MODEL, MEETING_LANGUAGE
 from src.utils.constans import TRANSCRIPTION_FILE_NAME
 from src.utils.paths import RECORDS_DIR
 import whisper
@@ -55,11 +55,11 @@ class TranscriberService:
             print(f"Error during transcript saving: {e}")
             return False
 
-    def transcribe_and_save(self, audio_path, filename, language="en", format="txt") -> bool:
+    def transcribe_and_save(self, audio_path, filename, format="txt") -> bool:
         """
         Combines transcription and saving to file in one step.
         """
-        transcript = self.transcribe_audio(audio_path, language)
+        transcript = self.transcribe_audio(audio_path, MEETING_LANGUAGE)
         if transcript:
             return self.save_transcript(transcript, filename, format)
         return False

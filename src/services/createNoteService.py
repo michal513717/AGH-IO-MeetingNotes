@@ -17,9 +17,22 @@ class CreateNoteSerivce():
         with open(file_path, 'r', encoding='utf-8') as file:
             transcript = file.read()
         
+        return self.process_text(transcript)
+
+    def split_text(self, text, chunk_size):
+        words = text.split()
+        for i in range(0, len(words), chunk_size):
+            yield ' '.join(words[i:i + chunk_size])
+
+    def process_text(self, text, size = 600) -> str:
+        chunks = self.split_text(text, size)
+        processed_chunks = [self._make_requset(chunk) for chunk in chunks]
+        return ' '.join(processed_chunks)
+
+    def _make_requset(self, text) -> str:
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
-            max_tokens=300,
+            max_tokens=600,
             temperature=0.7,
             messages=[
                 { 
@@ -28,19 +41,17 @@ class CreateNoteSerivce():
                 }, 
                 { 
                     "role": "user", 
-                    "content": f"Meeting transcript:\n\n{transcript}"
+                    "content": f"Meeting transcript:\n\n{text}"
                 }
             ]
         )
-
-        print(response.choices[0].message.content)
 
         return response.choices[0].message.content
     
     def create_notes(self, meeting_name: str) -> None:
 
-        # notes = self._summarize_meeting(meeting_name)
-        notes = "Podczas spotkania omówiono dwa rodzaje smogu: smog fotochemiczny (typ Los Angeles) i smog londyński. Zdecydowano o konieczności działań mających na celu zmniejszenie emisji tlenków azotu z układów wydechowych samochodów, które przyczyniają się do powstawania smogu fotochemicznego. Ustalono również, że należy monitorować poziom zanieczyszczeń związanych z sadzą i niespalonym paliwem w celu ograniczenia smogu londyńskiego. Dalsze kroki obejmują przygotowanie raportu na temat wpływu obu typów smogu na zdrowie publiczne."
+        notes = self._summarize_meeting(meeting_name)
+        # notes = "Podczas spotkania omówiono dwa rodzaje smogu: smog fotochemiczny (typ Los Angeles) i smog londyński. Zdecydowano o konieczności działań mających na celu zmniejszenie emisji tlenków azotu z układów wydechowych samochodów, które przyczyniają się do powstawania smogu fotochemicznego. Ustalono również, że należy monitorować poziom zanieczyszczeń związanych z sadzą i niespalonym paliwem w celu ograniczenia smogu londyńskiego. Dalsze kroki obejmują przygotowanie raportu na temat wpływu obu typów smogu na zdrowie publiczne."
 
         self._save_notes(meeting_name, notes)
 
