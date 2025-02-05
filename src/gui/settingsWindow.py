@@ -7,7 +7,7 @@ class SettingsWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Settings")
-        self.setFixedSize(350, 300)
+        self.setFixedSize(350, 320)
         layout = QVBoxLayout()
 
         self.settings_manager = SettingsManager()
@@ -42,9 +42,11 @@ class SettingsWindow(QDialog):
 
         # Note Languages
         self.note_lang_label = QLabel("Note Languages:")
-        self.note_lang_input = QLineEdit(self.settings_manager.settings["NOTE_LANGUAGES"])
+        self.note_lang_select = QComboBox()
+        self.note_lang_select.addItems(AVAILABLE_LANGUAGES)
+        self.note_lang_select.setCurrentText(self.settings_manager.get("NOTE_LANGUAGES"))
         layout.addWidget(self.note_lang_label)
-        layout.addWidget(self.note_lang_input)
+        layout.addWidget(self.note_lang_select)
 
         # Notes Word Limit
         self.word_limit_label = QLabel("Notes Word Limit:")
@@ -61,14 +63,18 @@ class SettingsWindow(QDialog):
 
     def save_changes(self):
         try:
-            self.settings_manager.settings["FPS"] = int(self.fps_input.text())
-            self.settings_manager.settings["SCREENSHOT_INTERVAL"] = int(self.screenshot_input.text())
-            self.settings_manager.settings["WHISPER_MODEL"] = self.whisper_input.currentText()
-            self.settings_manager.settings["MEETING_LANGUAGE"] = self.meeting_lang_input.text()
-            self.settings_manager.settings["NOTE_LANGUAGES"] = self.note_lang_input.text()
-            self.settings_manager.settings["NOTES_WORD_LIMIT"] = int(self.word_limit_input.text())
+            fps = int(self.fps_input.text()) if self.fps_input.text().isdigit() else 30
+            screenshot_interval = int(self.screenshot_input.text()) if self.screenshot_input.text().isdigit() else 5
+            word_limit = int(self.word_limit_input.text()) if self.word_limit_input.text().isdigit() else 1000
+
+            self.settings_manager.set("FPS", fps)
+            self.settings_manager.set("SCREENSHOT_INTERVAL", screenshot_interval)
+            self.settings_manager.set("WHISPER_MODEL", self.whisper_input.currentText())
+            self.settings_manager.set("MEETING_LANGUAGE", self.language_select.currentText())
+            self.settings_manager.set("NOTE_LANGUAGES", self.note_lang_select.currentText())
+            self.settings_manager.set("NOTES_WORD_LIMIT", word_limit)
 
             self.settings_manager.save_settings()
             self.accept()
         except ValueError:
-            print("Invalid input: Please enter valid numbers for FPS and word limit.")
+            print("Invalid input")
