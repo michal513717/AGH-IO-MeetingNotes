@@ -54,14 +54,22 @@ class CreateNoteSerivce():
         notes = self._summarize_meeting(meeting_name)
         # notes = "Podczas spotkania omówiono dwa rodzaje smogu: smog fotochemiczny (typ Los Angeles) i smog londyński. Zdecydowano o konieczności działań mających na celu zmniejszenie emisji tlenków azotu z układów wydechowych samochodów, które przyczyniają się do powstawania smogu fotochemicznego. Ustalono również, że należy monitorować poziom zanieczyszczeń związanych z sadzą i niespalonym paliwem w celu ograniczenia smogu londyńskiego. Dalsze kroki obejmują przygotowanie raportu na temat wpływu obu typów smogu na zdrowie publiczne."
 
-        self._save_notes(meeting_name, notes)
+        self.save_notes(meeting_name, notes)
 
-    def _save_notes(self, meeting_name: str, notes: str) -> None:
+    def save_notes(self, meeting_name: str, notes: str) -> None:
+
+        self.create_txt_file(meeting_name, notes)
+        self.create_pdf_file(meeting_name, notes)
+
+    def create_txt_file(self, meeting_name, notes):
         output_path_txt = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME_TXT)
-        output_path_pdf = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME_PDF)
 
         with open(output_path_txt, 'w', encoding='utf-8') as file:
             file.write(notes)
+
+    def create_pdf_file(self, meeting_name, notes):
+                
+        output_path_pdf = os.path.join(RECORDS_DIR, meeting_name, NOTE_FILE_NAME_PDF)
 
         self.pdf.add_page()
         self.pdf.set_margins(left=25, top=20, right=25)

@@ -1,5 +1,4 @@
 from src.managers.audioManager import AudioManager
-from src.utils.constans import FILE_NAME_MP33
 from src.utils.paths import RECORDS_DIR
 import pyaudiowpatch as pyaudio
 import wave
@@ -8,7 +7,7 @@ import time
 import threading
 
 class AudioRecorder():
-    def __init__(self, meetingName: str):
+    def __init__(self, meeting_name: str):
         """
         Initialize the audio recorder with default settings.
         """
@@ -18,7 +17,7 @@ class AudioRecorder():
         self.is_recording = False
         self.counter = 0
         self.speakers = AudioManager.get_default_speakers()
-        self.audio_filename_path = os.path.join(RECORDS_DIR, meetingName, "audios", FILE_NAME_MP33)
+        self.audio_filename_path = os.path.join(RECORDS_DIR, meeting_name, "audios", meeting_name)
 
     def set_meeting_name(self, meeting_name) -> None:
         """
@@ -26,7 +25,7 @@ class AudioRecorder():
 
         :param meeting_name: Name of the meeting to save the audio file.
         """
-        self.audio_filename_path = os.path.join(RECORDS_DIR, meeting_name, "audios", FILE_NAME_MP33)
+        self.audio_filename_path = os.path.join(RECORDS_DIR, meeting_name, "audios", meeting_name)
 
     def start_recording(self,  duration=5):
         """
@@ -40,9 +39,9 @@ class AudioRecorder():
 
             sample_rate = int(self.speakers["defaultSampleRate"])
 
-            a = self.audio_filename_path + "_" + str(self.counter) + ".wav"
+            output_path = self.audio_filename_path + "_" + str(self.counter) + ".wav"
             
-            self.wave_file = wave.open(a, 'wb')
+            self.wave_file = wave.open(output_path, 'wb')
             self.wave_file.setnchannels(channels)
             self.wave_file.setsampwidth(self.audio_interface.get_sample_size(pyaudio.paInt16))
             self.wave_file.setframerate(sample_rate)
@@ -78,8 +77,6 @@ class AudioRecorder():
         if self.audio_stream:
             self.audio_stream.stop_stream()
             self.audio_stream.close()
-        # if self.audio_interface:
-        #     self.audio_interface.terminate()
         if self.wave_file:
             self.wave_file.close()
 
@@ -96,4 +93,4 @@ class AudioRecorder():
     def stop(self):
         self.is_recording = False
         self.audio_thread.join()
-        time.sleep(5)
+        time.sleep(5) # prevetion

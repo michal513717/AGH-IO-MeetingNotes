@@ -2,6 +2,7 @@ import os
 from PyQt6.QtWidgets import (QDialog, QHBoxLayout, QListWidgetItem, QListWidget,
                              QTextEdit, QVBoxLayout, QMessageBox, QPushButton)
 from src.utils.constans import NOTE_FILE_NAME_TXT
+from src.services.createNoteService import CreateNoteSerivce
 from src.utils.paths import RECORDS_DIR
 import subprocess
 import os
@@ -11,7 +12,7 @@ class NotesWindow(QDialog):
         super().__init__()
 
         self.current_summary = ""
-
+        self.createNoteSerivce = CreateNoteSerivce()
         self.setWindowTitle("Notes")
 
         main_layout = QHBoxLayout()
@@ -94,6 +95,8 @@ class NotesWindow(QDialog):
 
         with open(output_path, "w", encoding='utf-8') as file:
             file.write(notes)
+
+        self.createNoteSerivce.save_notes(self.current_summary, notes)
 
     def open_folder(self, additional = None):
 
