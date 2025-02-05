@@ -1,4 +1,4 @@
-from src.core.audioManager import AudioManager
+from src.managers.audioManager import AudioManager
 from src.utils.constans import CHUNK_SIZE, FILE_NAME_MP3
 from src.utils.paths import RECORDS_DIR
 

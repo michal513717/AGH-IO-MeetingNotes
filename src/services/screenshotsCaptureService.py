@@ -1,5 +1,5 @@
 from src.utils.paths import RECORDS_DIR
-from src.core.windowsManager import WindowsManager
+from src.managers.windowsManager import WindowsManager
 from datetime import datetime
 from mss import mss, tools
 import threading

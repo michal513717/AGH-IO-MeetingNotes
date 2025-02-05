@@ -1,11 +1,10 @@
-from PyQt6.QtWidgets import (QMainWindow, QLabel, QVBoxLayout, QWidget, QComboBox, QLineEdit, QPushButton, QHBoxLayout)
-from PyQt6.QtGui import QAction
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (QMainWindow, QVBoxLayout, QWidget, QComboBox, QLineEdit, QPushButton, QHBoxLayout, QMessageBox)
 from src.gui.settingsWindow import SettingsWindow
 from src.gui.notesWindow import NotesWindow
-from src.core.windowsManager import WindowsManager
-from src.core.meetingNotesManager import MeetingNotesManager
 from src.gui.calendarWindow import CalendarWindow
+from src.managers.windowsManager import WindowsManager
+from src.managers.directoriesManager import DirectoriesManager
+from src.core.meetingNotesManager import MeetingNotesManager
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -59,15 +58,15 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-    def open_calendar(self):
+    def open_calendar(self) -> None:
         calendar_window = CalendarWindow()
         calendar_window.exec()
 
-    def open_settings(self):
+    def open_settings(self) -> None:
         settings_window = SettingsWindow()
         settings_window.exec()
 
-    def open_notes(self):
+    def open_notes(self) -> None:
         notes_window = NotesWindow()
         notes_window.exec()
     
@@ -75,15 +74,31 @@ class MainWindow(QMainWindow):
         for window in WindowsManager.get_active_meetins_applications():
             self.window_select.addItem(window)
 
-    def start_recording(self):
+    def start_recording(self) -> None:
+
+        if(self.check_requirments() == False):
+            return
+        
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(True)
-        self.meeting_notes_manager.set_meeting_name("AAAA")
+        self.meeting_notes_manager.set_meeting_name(self.name_input.text())
         self.meeting_notes_manager.set_window_name(self.window_select.currentText())
-        self.meeting_notes_manager.start_record("AAAA")
+        self.meeting_notes_manager.start_record(self.name_input.text())
         print("Recording started")
 
-    def stop_recording(self):
+    def check_requirments(self) -> bool:
+
+        if(self.name_input.text() == ""):
+            QMessageBox.critical(self, "Input Error", "Meeting name cannot be empty.")
+            return False
+        
+        if(DirectoriesManager.is_directory_exists_in_data(self.name_input.text()) == True):
+            QMessageBox.critical(self, "Input Error", "Meeting name already exist. Please change name.")
+            return False
+
+        return True
+
+    def stop_recording(self) -> None:
         self.start_button(True)
         self.stop_button(False)
         self.meeting_notes_manager.stop_record()

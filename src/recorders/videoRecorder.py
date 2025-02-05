@@ -1,7 +1,7 @@
 from src.utils.constans import FILE_NAME_MP4, FOURCC
 from src.utils.settings import FPS
 from src.utils.paths import RECORDS_DIR
-from src.core.windowsManager import WindowsManager
+from src.managers.windowsManager import WindowsManager
 import cv2
 import time
 import os
