@@ -1,7 +1,7 @@
 from src.recorders.audioRecorder import AudioRecorder
 from src.recorders.videoRecorder import VideoRecorder
 from src.services.screenshotsCaptureService import ScreenshootsCaptureService
-from src.utils.settings import SCREENSHOT_INTERVAL
+from src.managers.settingsManager import SettingsManager
 from src.utils.paths import RECORDS_DIR
 import ffmpeg
 import time
@@ -13,6 +13,7 @@ class RecordManager:
         self.audioRecorder = AudioRecorder("")
         self.videoRecorder = VideoRecorder("", "")
         self.screenshotsCaptureService = ScreenshootsCaptureService()
+        self.setting_manager = SettingsManager()
         self.meeting_name = None
         self.window_name = None
 
@@ -22,7 +23,7 @@ class RecordManager:
             self.window_name = window_name
             self.audioRecorder.set_meeting_name(meeting_name)
             self.videoRecorder.set_meeting_name(meeting_name)
-            self.screenshotsCaptureService.set_interval(SCREENSHOT_INTERVAL)
+            self.screenshotsCaptureService.set_interval(self.setting_manager.get_setting("SCREENSHOT_INTERVAL"))
             self.screenshotsCaptureService.set_output_dir(meeting_name)
             self.screenshotsCaptureService.set_monitor(window_name)
             self.videoRecorder.set_window_name(window_name)

@@ -22,6 +22,7 @@ class DirectoriesManager():
         :param directory: The directory to create.
         """
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory))
+        DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory, "screenshots"))
 
     @staticmethod
     def is_directory_exists(directory) -> bool:

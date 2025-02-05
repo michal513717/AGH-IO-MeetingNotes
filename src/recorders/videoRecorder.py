@@ -1,7 +1,7 @@
-from src.utils.constans import FILE_NAME_MP4, FOURCC
-from src.utils.settings import FPS
-from src.utils.paths import RECORDS_DIR
+from src.managers.settingsManager import SettingsManager
 from src.managers.windowsManager import WindowsManager
+from src.utils.constans import FILE_NAME_MP4, FOURCC
+from src.utils.paths import RECORDS_DIR
 import cv2
 import time
 import os
@@ -13,10 +13,11 @@ class VideoRecorder():
     "Video class based on openCV"
     def __init__(self, meeting_name, window_name):
         window_name = WindowsManager.get_active_windows()[0] #TMP
+        self.settings_manager = SettingsManager()
         self.window_rect = None
         self.video_filename_path = None
         self.open = True
-        self.fps = FPS
+        self.fps = self.settings_manager.get_setting("FPS")
         self.fourcc = FOURCC
         self.frame_size = None
         self.video_out = None
@@ -74,5 +75,6 @@ class VideoRecorder():
     def start(self) -> None:
         "Launches the video recording function using a thread"
         self.update_video_sources()
+        self.fps = self.settings_manager.get_setting("FPS")
         self.video_thread = threading.Thread(target=self.record)
         self.video_thread.start()

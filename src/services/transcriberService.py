@@ -1,12 +1,14 @@
-from src.utils.settings import WHISPER_MODEL, MEETING_LANGUAGE
 from src.utils.constans import TRANSCRIPTION_FILE_NAME
+from src.managers.settingsManager import SettingsManager
 from src.utils.paths import RECORDS_DIR
 import whisper
 import os
 
 class TranscriberService:
     def __init__(self):
-        self.model = whisper.load_model(WHISPER_MODEL)
+        self.settings_manager = SettingsManager()
+        self.current_whisper_model = self.settings_manager.get_setting("WHISPER_MODEL")
+        self.model = whisper.load_model(self.current_whisper_model)
 
     def transcribe_audio(self, audio_path, language="en") -> str:
         """
@@ -16,6 +18,10 @@ class TranscriberService:
         :param language: Transcription language (defaults to English).
         :return: The transcribed text or None if an error occurs.
         """
+
+        if(self.current_whisper_model != self.settings_manager.get_setting("WHISPER_MODEL")):
+            self.current_whisper_model = self.settings_manager.get_setting("WHISPER_MODEL")
+            self.model = whisper.load_model(self.current_whisper_model)
 
         if not os.path.isfile(audio_path):
             print("Audio file not found: {audio_path}")
@@ -59,7 +65,7 @@ class TranscriberService:
         """
         Combines transcription and saving to file in one step.
         """
-        transcript = self.transcribe_audio(audio_path, MEETING_LANGUAGE)
+        transcript = self.transcribe_audio(audio_path, self.settings_manager.get_setting("MEETING_LANGUAGE"))
         if transcript:
             return self.save_transcript(transcript, filename, format)
         return False

@@ -32,7 +32,7 @@ class ScreenshootsCaptureService:
         while self.is_running:
             screenshot = sct.grab(self.monitor)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_file = f"{self.output_dir}/screenshot_{timestamp}.png"
+            output_file = f"{self.output_dir}/screenshots/screenshot_{timestamp}.png"
             tools.to_png(screenshot.rgb, screenshot.size, output=output_file)
             count += 1
             time.sleep(self.interval)

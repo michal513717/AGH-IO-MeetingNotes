@@ -1,0 +1,8 @@
+{
+    "WHISPER_MODEL": "base",
+    "FPS": 20,
+    "SCREENSHOT_INTERVAL": 1,
+    "MEETING_LANGUAGE": "pl",
+    "NOTE_LANGUAGES": "pl",
+    "NOTES_WORD_LIMIT": 100
+}

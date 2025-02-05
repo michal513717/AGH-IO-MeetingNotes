@@ -1,5 +1,5 @@
 from src.utils.constans import CHAT_GPT_API_KEY, TRANSCRIPTION_FILE_NAME, NOTE_FILE_NAME_TXT, NOTE_FILE_NAME_PDF, FONT_NAME
-from src.utils.settings import NOTE_LANGUAGES, NOTES_WORD_LIMIT
+from src.managers.settingsManager import SettingsManager
 from src.utils.paths import RECORDS_DIR, FONTS_DIR
 from openai import OpenAI
 from fpdf import FPDF
@@ -8,6 +8,7 @@ import os
 class CreateNoteSerivce():
     def __init__(self):
         self.client = OpenAI(api_key=CHAT_GPT_API_KEY)
+        self.settings_manager = SettingsManager()
         self.pdf = FPDF()
 
     def _summarize_meeting(self, meeting_name: str) -> str:
@@ -37,7 +38,7 @@ class CreateNoteSerivce():
             messages=[
                 { 
                     "role": "system", 
-                    "content": f"You are a helpful assistant. Summarize the following meeting transcript in no more than {NOTES_WORD_LIMIT} words, focusing on key decisions and action items. Please summarize the following meeting transcript in {NOTE_LANGUAGES}"
+                    "content": f"You are a helpful assistant. Summarize the following meeting transcript in no more than {self.settings_manager.get_setting("NOTES_WORD_LIMIT")} words, focusing on key decisions and action items. Please summarize the following meeting transcript in {self.settings_manager.get_setting("NOTE_LANGUAGES")}"
                 }, 
                 { 
                     "role": "user", 
