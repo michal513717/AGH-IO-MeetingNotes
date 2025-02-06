@@ -21,6 +21,10 @@ class DirectoriesManager():
 
         :param directory: The directory to create.
         """
+
+        if not (os.path.exists(RECORDS_DIR)):
+            os.makedirs(os.path.join(RECORDS_DIR))
+
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory))
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory, "screenshots"))
         DirectoriesManager.create_directory(os.path.join(RECORDS_DIR, directory, "audios"))
