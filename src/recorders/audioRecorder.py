@@ -27,7 +27,7 @@ class AudioRecorder():
         """
         self.audio_filename_path = os.path.join(RECORDS_DIR, meeting_name, "audios", meeting_name)
 
-    def start_recording(self,  duration=5):
+    def start_recording(self,  duration=15):
         """
         Start recording audio from the system output for a given duration (in seconds).
         """
@@ -45,7 +45,7 @@ class AudioRecorder():
             self.wave_file.setnchannels(channels)
             self.wave_file.setsampwidth(self.audio_interface.get_sample_size(pyaudio.paInt16))
             self.wave_file.setframerate(sample_rate)
-            print("TUTAJ?")
+            
             def callback(in_data, frame_count, time_info, status):
                 self.wave_file.writeframes(in_data)
                 return in_data, pyaudio.paContinue
@@ -93,4 +93,4 @@ class AudioRecorder():
     def stop(self):
         self.is_recording = False
         self.audio_thread.join()
-        time.sleep(5) # prevetion
+        time.sleep(15) # prevetion
